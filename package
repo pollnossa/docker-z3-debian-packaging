@@ -1,0 +1,30 @@
+#!/bin/bash
+
+DISTRIBUTION_CODENAME=vivid
+GPG_PUBLIC_KEY=B30A2100
+MAINTAINER='Vytautas Astrauskas <vastrauskas@gmail.com>'
+DATE=$(LC_ALL=C date +'%a, %d %b %Y %T %z')
+Z3_VERSION=4.4.0
+Z3_DEBIAN_VERSION="${Z3_VERSION}-1"
+SOURCE_DIR="z3-${Z3_DEBIAN_VERSION}"
+ARCHIVE="z3_${Z3_VERSION}.orig.tar.gz"
+Z3_URL="https://github.com/Z3Prover/z3/archive/z3-${Z3_VERSION}.zip"
+
+rm -rf z3*
+wget -c "$Z3_URL" -O z3.zip
+unzip z3.zip
+mv z3-* "$SOURCE_DIR"
+tar -zcvf "$ARCHIVE" "$SOURCE_DIR"
+
+cp -r debian "$SOURCE_DIR"
+
+cd "$SOURCE_DIR"
+echo "z3 (${Z3_DEBIAN_VERSION}) ${DISTRIBUTION_CODENAME}; urgency=low" > 'debian/changelog'
+echo "" >> 'debian/changelog'
+echo "  * Released ${Z3_DEBIAN_VERSION}" >> 'debian/changelog'
+echo "" >> 'debian/changelog'
+echo " -- ${MAINTAINER}  ${DATE}" >> 'debian/changelog'
+debuild -S -k$GPG_PUBLIC_KEY
+#debuild -us -uc
+cd ..
+dput ppa:vastrauskas/z3 "z3_${Z3_DEBIAN_VERSION}_source.changes"

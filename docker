@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "Make sure that your PGP is accessible and run ./package script."
+docker run -ti --rm \
+         -v "$(pwd):/home/maintainer/workspace" \
+         vakaras/docker-z3-debian-packaging:v0.1 

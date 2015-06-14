@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker build -t vakaras/docker-z3-debian-packaging:v0.1 .

@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+override_dh_auto_configure:
+	./configure
+	sed -i -e 's/ \/usr/ $$(PREFIX)/g' build/Makefile
+
+override_dh_auto_build:
+	cd build && make
+
+override_dh_auto_install:
+	mkdir -p debian/usr/lib/python2.7/dist-packages/
+	cd build && make PREFIX=$$(pwd)/../debian/usr install
